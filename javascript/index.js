@@ -1,0 +1,153 @@
+  const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => obs.observe(r));
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = '✓ Message Received';
+      btn.style.background = '#2D6A4F';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; btn.disabled = false; e.target.reset(); }, 4000);
+    }
+
+  /*
+   * ─────────────────────────────────────────────
+   *  PHOTO DATA
+   *  To use your own photos, replace the `src`
+   *  values below with real image paths or URLs.
+   *  e.g. src: "images/service-01.jpg"
+   * ─────────────────────────────────────────────
+   */
+  const photos = [
+    { cat: "sunday",    label: "Morning worship",        src: "asset/web.jpg", h: 280 },
+    { cat: "events",    label: "Youth program",           src: "", h: 200 },
+    { cat: "building",  label: "The main hall",           src: "", h: 340 },
+    { cat: "community", label: "Food drive",              src: "", h: 220 },
+    { cat: "sunday",    label: "Choir performance",       src: "", h: 260 },
+    { cat: "events",    label: "Christmas program",       src: "", h: 310 },
+    { cat: "building",  label: "The bell tower",          src: "", h: 200 },
+    { cat: "community", label: "Neighbourhood cleanup",   src: "", h: 260 },
+    { cat: "sunday",    label: "Easter Sunday",           src: "", h: 220 },
+    { cat: "events",    label: "Baptism ceremony",        src: "", h: 300 },
+    { cat: "building",  label: "Chapel interior",         src: "", h: 240 },
+    { cat: "community", label: "After-school program",    src: "", h: 200 },
+    { cat: "sunday",    label: "Sunday prayer",           src: "", h: 320 },
+    { cat: "events",    label: "Harvest festival",        src: "", h: 210 },
+    { cat: "community", label: "Elderly care visit",      src: "", h: 280 },
+  ];
+
+  /* Category config */
+  const catConfig = {
+    sunday:    { label: "Sunday service",     badge: "badge-sunday",    color: "#c8b6e2", icon: "✝" },
+    events:    { label: "Events & programs",  badge: "badge-events",    color: "#a8d8c2", icon: "★" },
+    building:  { label: "Church building",    badge: "badge-building",  color: "#f5d5a0", icon: "⛪" },
+    community: { label: "Community outreach", badge: "badge-community", color: "#f0b8a0", icon: "❤" },
+  };
+
+  /* ── Generate a placeholder canvas image ── */
+  function makePlaceholder(p) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 600;
+    canvas.height = p.h * 2;
+    const ctx = canvas.getContext("2d");
+    const cfg = catConfig[p.cat];
+
+    ctx.fillStyle = cfg.color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "rgba(255,255,255,0.22)";
+    ctx.font = `${Math.min(canvas.height * 0.38, 140)}px serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(cfg.icon, canvas.width / 2, canvas.height / 2);
+
+    return canvas.toDataURL("image/png");
+  }
+
+  /* ── Build the grid ── */
+  const grid = document.getElementById("grid");
+
+  photos.forEach((p) => {
+    const cfg = catConfig[p.cat];
+    const card = document.createElement("div");
+    card.className = "photo-card";
+    card.dataset.cat = p.cat;
+
+    const img = document.createElement("img");
+    /* Use real src if provided, otherwise generate placeholder */
+    img.src = p.src || makePlaceholder(p);
+    img.alt = p.label;
+    img.style.height = p.h + "px";
+    img.loading = "lazy";
+
+    const overlay = document.createElement("div");
+    overlay.className = "photo-overlay";
+
+    const lbl = document.createElement("span");
+    lbl.className = "photo-label";
+    lbl.textContent = p.label;
+
+    const badge = document.createElement("span");
+    badge.className = "cat-badge " + cfg.badge;
+    badge.textContent = cfg.label;
+
+    overlay.appendChild(lbl);
+    card.appendChild(img);
+    card.appendChild(overlay);
+    card.appendChild(badge);
+    grid.appendChild(card);
+
+    /* Open lightbox on click */
+    card.addEventListener("click", () => openLightbox(img.src, p.label));
+  });
+
+  /* ── Filter logic ── */
+  const countLabel = document.getElementById("count-label");
+
+  function applyFilter(filter) {
+    let visible = 0;
+    document.querySelectorAll(".photo-card").forEach((card) => {
+      const show = filter === "all" || card.dataset.cat === filter;
+      card.classList.toggle("hidden", !show);
+      if (show) visible++;
+    });
+    countLabel.textContent = visible + " photo" + (visible !== 1 ? "s" : "");
+  }
+
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      applyFilter(btn.dataset.filter);
+    });
+  });
+
+  applyFilter("all");
+
+  /* ── Lightbox ── */
+  const lightbox  = document.getElementById("lightbox");
+  const lbImg     = document.getElementById("lb-img");
+  const lbCaption = document.getElementById("lb-caption");
+
+  function openLightbox(src, caption) {
+    lbImg.src = src;
+    lbImg.alt = caption;
+    lbCaption.textContent = caption;
+    lightbox.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  document.getElementById("lb-close").addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
