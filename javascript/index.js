@@ -25,21 +25,22 @@
    * ─────────────────────────────────────────────
    */
   const photos = [
-    { cat: "sunday",    label: "Morning worship",        src: "asset/web.jpg", h: 280 },
-    { cat: "events",    label: "Youth program",           src: "", h: 200 },
-    { cat: "building",  label: "The main hall",           src: "", h: 340 },
-    { cat: "community", label: "Food drive",              src: "", h: 220 },
-    { cat: "sunday",    label: "Choir performance",       src: "", h: 260 },
-    { cat: "events",    label: "Christmas program",       src: "", h: 310 },
-    { cat: "building",  label: "The bell tower",          src: "", h: 200 },
-    { cat: "community", label: "Neighbourhood cleanup",   src: "", h: 260 },
-    { cat: "sunday",    label: "Easter Sunday",           src: "", h: 220 },
-    { cat: "events",    label: "Baptism ceremony",        src: "", h: 300 },
+    { cat: "sunday",    label: "Message session",        src: "asset/IMG-20260325-WA0069.jpg", h: 280 },
+    { cat: "sunday",    label: "Ministers of God",           src: "asset/IMG-20260325-WA0063.jpg", h: 200 },
+    { cat: "community",  label: "Evangelism",           src: "asset/IMG-20260325-WA0096.jpg", h: 340 },
+    { cat: "events", label: "Women program",              src: "asset/IMG-20260325-WA0031.jpg", h: 220 },
+    { cat: "community",    label: "Evangelism",       src: "asset/IMG-20260325-WA0094.jpg", h: 260 },
+    { cat: "sunday",    label: "Women sunday",       src: "asset/IMG-20260325-WA0055.jpg", h: 200 },
+    { cat: "events",    label: "Women program",       src: "asset/IMG-20260325-WA0036.jpg", h: 210 },
+    { cat: "events",  label: "Women program",          src: "asset/IMG-20260325-WA0055.jpg", h: 190 },
+    { cat: "community", label: "Evangelism",   src: "asset/IMG-20260325-WA0090.jpg", h: 260 },
+    { cat: "sunday",    label: " Sunday jpeg",           src: "asset/IMG-20260325-WA0038.jpg", h: 220 },
+    { cat: "events",    label: "Thanksgiving ceremony",        src: "asset/IMG-20260325-WA0039.jpg", h: 300 },
     { cat: "building",  label: "Chapel interior",         src: "", h: 240 },
-    { cat: "community", label: "After-school program",    src: "", h: 200 },
-    { cat: "sunday",    label: "Sunday prayer",           src: "", h: 320 },
-    { cat: "events",    label: "Harvest festival",        src: "", h: 210 },
-    { cat: "community", label: "Elderly care visit",      src: "", h: 280 },
+    { cat: "sunday", label: "After-church jpeg",    src: "asset/IMG-20260325-WA0054.jpg", h: 400 },
+    { cat: "sunday",    label: "Sunday prayer",           src: "asset/pastor.png", h: 320 },
+    { cat: "events",    label: "Thanksgiving festival",        src: "asset/IMG-20260325-WA0072.jpg", h: 210 },
+    { cat: "events", label: "Praise night",      src: "asset/IMG-20260325-WA0061.jpg", h: 280 },
   ];
 
   /* Category config */
@@ -151,3 +152,87 @@
   document.getElementById("lb-close").addEventListener("click", closeLightbox);
   lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+
+  const branches = [
+    {
+      name: "Abundant Life Assembly  — Ayeteju Branch",
+      tag: "Branch 1",
+      tagClass: "tag-1",
+      pinClass: "pin-1",
+      icon: "✝",
+      pastor: "Pastor Julius Banjo",
+      address: "-",
+      phone: "+234 ",
+      email: "--",
+      services: "Sundays 8:00 AM & 10:30 AM · Wednesdays 6:00 PM",
+    },
+    {
+      name: "Abundant Life Assembly  — Deb0jo   Branch",
+      tag: "Branch 2",
+      tagClass: "tag-2",
+      pinClass: "pin-2",
+      icon: "✝",
+      pastor: "Pastor Gbenga Banjo",
+      address: "-- ",
+      phone: "+234 ",
+      email: "--",
+      services: "Sundays 9:00 AM & 11:00 AM · Fridays 6:30 PM",
+    },
+    {
+      name: "Abundant Life Assembly — Sala Branch",
+      tag: "Branch 3",
+      tagClass: "tag-3",
+      pinClass: "pin-3",
+      icon: "✝",
+      pastor: "Pastor Olujimi Ajose",
+      address: "--",
+      phone: "+234 816 776 3048",
+      email: "--",
+      services: "Sundays 9:30 AM & 12:00 PM · Wednesday 6:00 PM",
+    },
+    
+  ];
+
+  /* ── Render branch list ── */
+  const branchList = document.getElementById("branch-list");
+
+  branches.forEach((b, i) => {
+    const num = String(i + 1).padStart(2, "0");
+    const item = document.createElement("div");
+    item.className = "branch-item";
+    item.innerHTML = `
+      <div class="pin-col">
+        <div class="pin ${b.pinClass}">
+          <span class="pin-inner">${b.icon}</span>
+        </div>
+        <span class="pin-num">${num}</span>
+      </div>
+      <div class="branch-content">
+        <div class="branch-name">${b.name}</div>
+        <span class="branch-tag ${b.tagClass}">${b.tag}</span>
+        <div class="branch-details">
+          <div class="detail-row">
+            <span class="detail-label">Pastor / Leader</span>
+            <span class="detail-value">${b.pastor}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Service times</span>
+            <span class="detail-value">${b.services}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Address</span>
+            <span class="detail-value">${b.address}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Phone</span>
+            <span class="detail-value"><a href="tel:${b.phone.replace(/\s/g,'')}">${b.phone}</a></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Email</span>
+            <span class="detail-value"><a href="mailto:${b.email}">${b.email}</a></span>
+          </div>
+        </div>
+      </div>
+    `;
+    branchList.appendChild(item);
+  });
