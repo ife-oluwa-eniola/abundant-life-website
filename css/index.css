@@ -1332,7 +1332,7 @@ footer {
       letter-spacing: 0.04em;
     }
 
-    * ════════════════════════════════
+     /* ════════════════════════════════
        BRANCHES SECTION
     ════════════════════════════════ */
     .branches-section {
@@ -1340,17 +1340,17 @@ footer {
       padding: 5rem 1.5rem;
       border-top: 1px solid #e2dfd8;
     }
-
+ 
     .branches-inner {
       max-width: 860px;
       margin: 0 auto;
     }
-
+ 
     .branches-header {
       text-align: center;
       margin-bottom: 3.5rem;
     }
-
+ 
     .branches-header h2 {
       font-family: 'Cormorant Garamond', serif;
       font-size: 2.2rem;
@@ -1358,20 +1358,20 @@ footer {
       color: #1a1a1a;
       letter-spacing: 0.01em;
     }
-
+ 
     .branches-header p {
       font-size: 15px;
       color: #6b6b6b;
       margin-top: 8px;
     }
-
+ 
     /* ── Branch list ── */
     .branch-list {
       display: flex;
       flex-direction: column;
       gap: 0;
     }
-
+ 
     .branch-item {
       display: grid;
       grid-template-columns: 48px 1fr;
@@ -1381,11 +1381,11 @@ footer {
       position: relative;
       transition: background 0.2s;
     }
-
+ 
     .branch-item:first-child {
       border-top: 1px solid #dedad3;
     }
-
+ 
     /* Vertical connector line between pins */
     .branch-item:not(:last-child) .pin-col::after {
       content: '';
@@ -1397,7 +1397,7 @@ footer {
       top: calc(2rem + 48px);
       bottom: -1px;
     }
-
+ 
     /* ── Pin column ── */
     .pin-col {
       display: flex;
@@ -1406,7 +1406,7 @@ footer {
       padding-top: 2px;
       position: relative;
     }
-
+ 
     .pin {
       width: 44px;
       height: 44px;
@@ -1418,13 +1418,13 @@ footer {
       flex-shrink: 0;
       border: 1.5px solid rgba(0,0,0,0.08);
     }
-
+ 
     .pin-inner {
       transform: rotate(45deg);
       font-size: 18px;
       line-height: 1;
     }
-
+ 
     .pin-num {
       margin-top: 10px;
       font-size: 11px;
@@ -1433,17 +1433,17 @@ footer {
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
+ 
     /* Pin colour variants */
     .pin-1 { background: #EEEDFE; }
     .pin-2 { background: #E1F5EE; }
     .pin-3 { background: #FAEEDA; }
-
+ 
     /* ── Branch content ── */
     .branch-content {
       padding-top: 4px;
     }
-
+ 
     .branch-name {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.5rem;
@@ -1451,7 +1451,7 @@ footer {
       color: #1a1a1a;
       margin-bottom: 4px;
     }
-
+ 
     .branch-tag {
       display: inline-block;
       font-size: 10px;
@@ -1462,27 +1462,27 @@ footer {
       border-radius: 100px;
       margin-bottom: 16px;
     }
-
+ 
     .tag-1 { background: #EEEDFE; color: #3C3489; }
     .tag-2 { background: #E1F5EE; color: #085041; }
     .tag-3 { background: #FAEEDA; color: #633806; }
-
+ 
     .branch-details {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px 24px;
     }
-
+ 
     @media (max-width: 560px) {
       .branch-details { grid-template-columns: 1fr; }
     }
-
+ 
     .detail-row {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
-
+ 
     .detail-label {
       font-size: 10px;
       font-weight: 500;
@@ -1490,24 +1490,24 @@ footer {
       text-transform: uppercase;
       color: #9a9a9a;
     }
-
+ 
     .detail-value {
       font-size: 14px;
       color: #2a2a2a;
       line-height: 1.5;
     }
-
+ 
     .detail-value a {
       color: #2a2a2a;
       text-decoration: none;
       border-bottom: 1px solid #c4c1ba;
       transition: border-color 0.2s;
     }
-
+ 
     .detail-value a:hover {
       border-color: #1a1a1a;
     }
-
+ 
     @media (max-width: 560px) {
       .branch-item { grid-template-columns: 36px 1fr; gap: 0 16px; }
       .pin { width: 36px; height: 36px; }
