@@ -162,8 +162,6 @@
       icon: "✝",
       pastor: "Pastor Julius Banjo",
       address: "-",
-      phone: "+234 ",
-      email: "--",
       services: "Sundays 8:00 AM & 10:30 AM · Wednesdays 6:00 PM",
     },
     {
@@ -174,8 +172,6 @@
       icon: "✝",
       pastor: "Pastor Gbenga Banjo",
       address: "-- ",
-      phone: "+234 ",
-      email: "--",
       services: "Sundays 9:00 AM & 11:00 AM · Fridays 6:30 PM",
     },
     {
@@ -186,8 +182,6 @@
       icon: "✝",
       pastor: "Pastor Olujimi Ajose",
       address: "--",
-      phone: "+234 816 776 3048",
-      email: "--",
       services: "Sundays 9:30 AM & 12:00 PM · Wednesday 6:00 PM",
     },
     
