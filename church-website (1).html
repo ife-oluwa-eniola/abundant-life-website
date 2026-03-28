@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grace Chapel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: #faf9f7;
+      color: #1a1a1a;
+    }
+
+    /* ════════════════════════════════
+       SHARED SECTION STYLES
+    ════════════════════════════════ */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: 0.01em;
+    }
+    .section-header p {
+      font-size: 15px;
+      color: #6b6b6b;
+      margin-top: 8px;
+    }
+
+    /* ════════════════════════════════
+       1. GALLERY
+    ════════════════════════════════ */
+    .gallery-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .filter-btn {
+      padding: 7px 20px;
+      font-size: 13px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      border: 1px solid #d4d2cb;
+      border-radius: 100px;
+      background: transparent;
+      color: #6b6b6b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.03em;
+    }
+    .filter-btn:hover { background: #f0ede8; color: #1a1a1a; }
+    .filter-btn.active { background: #1a1a1a; color: #faf9f7; border-color: #1a1a1a; }
+
+    .masonry-grid { columns: 3; column-gap: 14px; }
+    @media (max-width: 720px) { .masonry-grid { columns: 2; } }
+    @media (max-width: 440px) { .masonry-grid { columns: 1; } }
+
+    .photo-card {
+      break-inside: avoid;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.22s ease;
+    }
+    .photo-card.hidden { display: none; }
+    .photo-card:hover { transform: scale(1.025); }
+    .photo-card img { width: 100%; display: block; border-radius: 12px; object-fit: cover; }
+
+    .photo-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0);
+      border-radius: 12px;
+      display: flex; align-items: flex-end; padding: 16px;
+      transition: background 0.25s ease;
+    }
+    .photo-card:hover .photo-overlay { background: rgba(0,0,0,0.40); }
+    .photo-label { font-size: 12px; font-weight: 500; color: #fff; opacity: 0; transition: opacity 0.25s ease; letter-spacing: 0.06em; text-transform: uppercase; }
+    .photo-card:hover .photo-label { opacity: 1; }
+
+    .cat-badge {
+      position: absolute; top: 10px; left: 10px;
+      font-size: 10px; font-weight: 500;
+      padding: 3px 10px; border-radius: 100px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      opacity: 0; transition: opacity 0.25s ease;
+    }
+    .photo-card:hover .cat-badge { opacity: 1; }
+    .badge-sunday    { background: #EEEDFE; color: #3C3489; }
+    .badge-events    { background: #E1F5EE; color: #085041; }
+    .badge-building  { background: #FAEEDA; color: #633806; }
+    .badge-community { background: #FAECE7; color: #712B13; }
+
+    .count-label { font-size: 13px; color: #9a9a9a; text-align: center; margin-top: 2rem; letter-spacing: 0.02em; }
+
+    /* Lightbox */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85); z-index: 9999;
+      align-items: center; justify-content: center; padding: 2rem;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 85vw; max-height: 85vh; border-radius: 12px; object-fit: contain; }
+    .lightbox-info {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      color: #fff; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75;
+    }
+    .lightbox-close {
+      position: fixed; top: 1.5rem; right: 1.5rem;
+      background: rgba(255,255,255,0.15); border: none; color: #fff;
+      font-size: 20px; width: 42px; height: 42px;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.28); }
+    .kb-hint { position: fixed; bottom: 1.5rem; right: 1.5rem; font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.04em; }
+
+    /* ════════════════════════════════
+       2. BRANCHES
+    ════════════════════════════════ */
+    .branches-section {
+      background: #f2efe9;
+      padding: 5rem 1.5rem;
+      border-top: 1px solid #e2dfd8;
+    }
+    .branches-inner { max-width: 860px; margin: 0 auto; }
+    .branch-list { display: flex; flex-direction: column; }
+
+    .branch-item {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 0 24px;
+      padding: 2rem 0;
+      border-bottom: 1px solid #dedad3;
+      position: relative;
+    }
+    .branch-item:first-child { border-top: 1px solid #dedad3; }
+    .branch-item:not(:last-child) .pin-col::after {
+      content: '';
+      display: block;
+      width: 1px;
+      background: #dedad3;
+      position: absolute;
+      left: 23px;
+      top: calc(2rem + 48px);
+      bottom: -1px;
+    }
+
+    .pin-col { display: flex; flex-direction: column; align-items: center; padding-top: 2px; position: relative; }
+    .pin {
+      width: 44px; height: 44px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: 1.5px solid rgba(0,0,0,0.08);
+    }
+    .pin-inner { transform: rotate(45deg); font-size: 18px; line-height: 1; }
+    .pin-num { margin-top: 10px; font-size: 11px; font-weight: 500; color: #9a9a9a; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .pin-1 { background: #EEEDFE; }
+    .pin-2 { background: #E1F5EE; }
+    .pin-3 { background: #FAEEDA; }
+
+    .branch-content { padding-top: 4px; }
+    .branch-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+    .branch-tag {
+      display: inline-block; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 2px 10px; border-radius: 100px; margin-bottom: 16px;
+    }
+    .tag-1 { background: #EEEDFE; color: #3C3489; }
+    .tag-2 { background: #E1F5EE; color: #085041; }
+    .tag-3 { background: #FAEEDA; color: #633806; }
+
+    .branch-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+    @media (max-width: 560px) { .branch-details { grid-template-columns: 1fr; } }
+
+    .detail-row { display: flex; flex-direction: column; gap: 2px; }
+    .detail-label { font-size: 10px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: #9a9a9a; }
+    .detail-value { font-size: 14px; color: #2a2a2a; line-height: 1.5; }
+    .detail-value a { color: #2a2a2a; text-decoration: none; border-bottom: 1px solid #c4c1ba; transition: border-color 0.2s; }
+    .detail-value a:hover { border-color: #1a1a1a; }
+
+    @media (max-width: 560px) {
+      .branch-item { grid-template-columns: 36px 1fr; gap: 0 16px; }
+      .pin { width: 36px; height: 36px; }
+      .pin-inner { font-size: 15px; }
+      .branch-item:not(:last-child) .pin-col::after { left: 17px; }
+    }
+
+    /* ════════════════════════════════
+       3. GENERAL OVERSEER
+    ════════════════════════════════ */
+    .overseer-section {
+      padding: 5rem 1.5rem;
+      background: #1a1a1a;
+      border-top: 1px solid #2a2a2a;
+    }
+    .overseer-inner { max-width: 940px; margin: 0 auto; }
+    .overseer-inner .section-header h2 { color: #f5f2ec; }
+    .overseer-inner .section-header p  { color: #9a9a9a; }
+
+    .overseer-card {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    @media (max-width: 760px) {
+      .overseer-card { grid-template-columns: 1fr; }
+      .overseer-photo-wrap { max-width: 280px; margin: 0 auto; }
+    }
+
+    .overseer-photo-wrap { position: relative; }
+    .overseer-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      background: #2e2e2e;
+    }
+    /* Placeholder shown when no real photo is set */
+    .overseer-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      background: #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px dashed #3a3a3a;
+    }
+    .overseer-photo-placeholder span { font-size: 48px; opacity: 0.3; }
+    .overseer-photo-placeholder p { font-size: 12px; color: #555; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .overseer-accent {
+      position: absolute;
+      bottom: -10px; right: -10px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: #EEEDFE;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .overseer-info { padding-top: 4px; }
+    .overseer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #f5f2ec;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    .overseer-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #b59a6a;
+      margin-bottom: 1.5rem;
+    }
+
+    .overseer-quote {
+      border-left: 2px solid #b59a6a;
+      padding: 0.6rem 0 0.6rem 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+    .overseer-quote blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #c8c2b8;
+      line-height: 1.6;
+    }
+
+    .overseer-bio {
+      font-size: 15px;
+      color: #9a9a9a;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .overseer-socials {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid #333;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: #9a9a9a;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-btn:hover { border-color: #b59a6a; color: #f5f2ec; }
+    .social-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* ════════════════════════════════
+       4. MESSAGES
+    ════════════════════════════════ */
+    .messages-section {
+      padding: 5rem 1.5rem;
+      background: #faf9f7;
+      border-top: 1px solid #e8e5e0;
+    }
+    .messages-inner { max-width: 860px; margin: 0 auto; }
+
+    .messages-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .message-card {
+      background: #fff;
+      border: 1px solid #e8e5e0;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .message-card:hover { border-color: #c4c1ba; }
+
+    .message-left { display: flex; flex-direction: column; gap: 6px; }
+    .message-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .msg-series {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 9px;
+      border-radius: 100px;
+      background: #EEEDFE;
+      color: #3C3489;
+    }
+    .msg-date { font-size: 12px; color: #9a9a9a; }
+
+    .message-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+    .message-speaker { font-size: 13px; color: #6b6b6b; }
+
+    /* Native audio player styled minimally */
+    .message-audio {
+      width: 100%;
+      height: 36px;
+      accent-color: #1a1a1a;
+      margin-top: 4px;
+    }
+
+    .message-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid #d4d2cb;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 500;
+      color: #1a1a1a;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.03em;
+      font-family: 'Jost', sans-serif;
+    }
+    .dl-btn:hover { background: #f0ede8; border-color: #b8b5ae; }
+    .dl-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .msg-duration { font-size: 11px; color: #b0ada8; letter-spacing: 0.04em; text-align: right; }
+
+    @media (max-width: 600px) {
+      .message-card { grid-template-columns: 1fr; }
+      .message-actions { flex-direction: row; align-items: center; }
+    }
+
+    /* ════════════════════════════════
+       5. LIVE / YOUTUBE
+    ════════════════════════════════ */
+    .live-section {
+      padding: 5rem 1.5rem 6rem;
+      background: #f2efe9;
+      border-top: 1px solid #e2dfd8;
+    }
+    .live-inner { max-width: 900px; margin: 0 auto; }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c0392b;
+      background: #fde8e7;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #c0392b;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* YouTube embed container */
+    .yt-embed-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #111;
+      margin-bottom: 1.5rem;
+      border: 1px solid #dedad3;
+    }
+    .yt-embed-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Placeholder shown before real YouTube ID is added */
+    .yt-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #1a1a1a;
+    }
+    .yt-placeholder-icon {
+      width: 64px; height: 64px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .yt-placeholder-icon svg { width: 28px; height: 28px; fill: rgba(255,255,255,0.5); }
+    .yt-placeholder p { font-size: 13px; color: #555; letter-spacing: 0.04em; }
+    .yt-placeholder code { font-size: 12px; color: #b59a6a; background: #222; padding: 3px 10px; border-radius: 6px; }
+
+    .live-schedule {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .schedule-pill {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 18px;
+      background: #fff;
+      border: 1px solid #e2dfd8;
+      border-radius: 10px;
+    }
+    .schedule-pill-day { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9a9a; }
+    .schedule-pill-time { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+
+    .live-note { margin-top: 1.2rem; font-size: 13px; color: #9a9a9a; line-height: 1.7; }
+    .live-note a { color: #1a1a1a; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     1. PHOTO GALLERY
+══════════════════════════════ -->
+<div class="gallery-wrap">
+  <div class="section-header">
+    <h2>Our Gallery</h2>
+    <p>Moments of faith, community, and worship</p>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-btn active" data-filter="all">All Photos</button>
+    <button class="filter-btn" data-filter="sunday">Sunday Services</button>
+    <button class="filter-btn" data-filter="events">Events &amp; Programs</button>
+    <button class="filter-btn" data-filter="building">Church Building</button>
+    <button class="filter-btn" data-filter="community">Community Outreach</button>
+  </div>
+
+  <div class="masonry-grid" id="grid"></div>
+  <p class="count-label" id="count-label"></p>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="lightbox-close" id="lb-close" aria-label="Close">&#x2715;</button>
+  <img id="lb-img" src="" alt="" />
+  <span class="lightbox-info" id="lb-caption"></span>
+  <span class="kb-hint">Press Esc to close</span>
+</div>
+
+<!-- ══════════════════════════════
+     2. BRANCHES
+══════════════════════════════ -->
+<section class="branches-section">
+  <div class="branches-inner">
+    <div class="section-header">
+      <h2>Our Branches</h2>
+      <p>Find a congregation near you</p>
+    </div>
+    <div class="branch-list">
+
+      <div class="branch-item">
+        <div class="pin-col">
+          <div class="pin pin-1"><span class="pin-inner">✝</span></div>
+          <span class="pin-num">01</span>
+        </div>
+        <div class="branch-content">
+          <div class="branch-name">Grace Chapel — Main Branch</div>
+          <span class="branch-tag tag-1">Headquarters</span>
+          <div class="branch-details">
+            <div class="detail-row">
+              <span class="detail-label">Pastor / Leader</span>
+              <span class="detail-value">Rev. Samuel Okonkwo</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Service times</span>
+              <span class="detail-value">Sundays 8:00 AM &amp; 10:30 AM · Wednesdays 6:00 PM</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Address</span>
+              <span class="detail-value">14 Cathedral Road, Lagos Island, Lagos</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value"><a href="tel:+2348012345678">+234 801 234 5678</a></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value"><a href="mailto:main@gracechapel.org">main@gracechapel.org</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch-item">
+        <div class="pin-col">
+          <div class="pin pin-2"><span class="pin-inner">✝</span></div>
+          <span class="pin-num">02</span>
+        </div>
+        <div class="branch-content">
+          <div class="branch-name">Grace Chapel — Lekki Branch</div>
+          <span class="branch-tag tag-2">Branch 2</span>
+          <div class="branch-details">
+            <div class="detail-row">
+              <span class="detail-label">Pastor / Leader</span>
+              <span class="detail-value">Pastor Ngozi Adeyemi</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Service times</span>
+              <span class="detail-value">Sundays 9:00 AM &amp; 11:00 AM · Fridays 6:30 PM</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Address</span>
+              <span class="detail-value">7 Admiralty Way, Lekki Phase 1, Lagos</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value"><a href="tel:+2348023456789">+234 802 345 6789</a></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value"><a href="mailto:lekki@gracechapel.org">lekki@gracechapel.org</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch-item">
+        <div class="pin-col">
+          <div class="pin pin-3"><span class="pin-inner">✝</span></div>
+          <span class="pin-num">03</span>
+        </div>
+        <div class="branch-content">
+          <div class="branch-name">Grace Chapel — Abuja Branch</div>
+          <span class="branch-tag tag-3">Branch 3</span>
+          <div class="branch-details">
+            <div class="detail-row">
+              <span class="detail-label">Pastor / Leader</span>
+              <span class="detail-value">Pastor Emmanuel Bello</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Service times</span>
+              <span class="detail-value">Sundays 9:30 AM &amp; 12:00 PM · Thursdays 6:00 PM</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Address</span>
+              <span class="detail-value">22 Ahmadu Bello Way, Central Business District, Abuja</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value"><a href="tel:+2348034567890">+234 803 456 7890</a></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value"><a href="mailto:abuja@gracechapel.org">abuja@gracechapel.org</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     3. MEET OUR GENERAL OVERSEER
+══════════════════════════════ -->
+<section class="overseer-section">
+  <div class="overseer-inner">
+    <div class="section-header">
+      <h2 style="color:#f5f2ec;">Meet Our General Overseer</h2>
+      <p style="color:#6b6b6b;">A shepherd, a visionary, a servant of God</p>
+    </div>
+
+    <div class="overseer-card">
+
+      <!-- Photo column -->
+      <div class="overseer-photo-wrap">
+        <!--
+          TO ADD A REAL PHOTO:
+          Replace the placeholder div below with:
+          <img src="images/overseer.jpg" alt="Bishop David Adeyinka" class="overseer-photo" />
+        -->
+        <div class="overseer-photo-placeholder">
+          <span>&#9962;</span>
+          <p>Add overseer photo</p>
+          <code>src="images/overseer.jpg"</code>
+        </div>
+        <div class="overseer-accent"></div>
+      </div>
+
+      <!-- Info column -->
+      <div class="overseer-info">
+        <div class="overseer-title">General Overseer &amp; Founder</div>
+        <div class="overseer-name">Bishop David<br>Adeyinka</div>
+
+        <div class="overseer-quote">
+          <blockquote>
+            "The church is not a building — it is the heartbeat of God pulsing through His people, alive in every act of love and service."
+          </blockquote>
+        </div>
+
+        <p class="overseer-bio">
+          Bishop David Adeyinka founded Grace Chapel in 1994 with a congregation of twelve faithful members
+          in a small rented hall in Lagos Island. Over three decades, under his anointed leadership, the church
+          has grown into a vibrant family of thousands spread across multiple branches in Nigeria and beyond.
+          A graduate of theology from the University of Lagos and the School of Biblical Studies, Bishop Adeyinka
+          is a sought-after conference speaker, prolific author, and passionate advocate for community
+          transformation. He is married to Pastor (Mrs.) Ruth Adeyinka, and they are blessed with four children.
+        </p>
+
+        <div class="overseer-socials">
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            Facebook
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="fill:none;width:14px;height:14px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram
+          </a>
+          <a href="#" class="social-btn" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#1a1a1a"/></svg>
+            YouTube
+          </a>
+          <a href="#" class="social-btn" aria-label="Twitter / X">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X / Twitter
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     4. MESSAGES
+══════════════════════════════ -->
+<section class="messages-section">
+  <div class="messages-inner">
+    <div class="section-header">
+      <h2>Messages</h2>
+      <p>Listen, download, and be transformed by the Word</p>
+    </div>
+
+    <div class="messages-grid">
+
+      <!-- Message 1 -->
+      <div class="message-card">
+        <div class="message-left">
+          <div class="message-meta">
+            <span class="msg-series">Faith Series</span>
+            <span class="msg-date">March 16, 2025</span>
+          </div>
+          <div class="message-title">Walking in the Fullness of God's Promise</div>
+          <div class="message-speaker">Bishop David Adeyinka</div>
+          <!--
+            Replace the src below with the real audio file path.
+            e.g. src="messages/2025-03-16-fullness.mp3"
+          -->
+          <audio class="message-audio" controls preload="none">
+            <source src="" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="message-actions">
+          <!--
+            Replace href below with the real audio file path for download.
+            e.g. href="messages/2025-03-16-fullness.mp3"
+          -->
+          <a href="#" class="dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+          <span class="msg-duration">58 min</span>
+        </div>
+      </div>
+
+      <!-- Message 2 -->
+      <div class="message-card">
+        <div class="message-left">
+          <div class="message-meta">
+            <span class="msg-series">Prayer &amp; Power</span>
+            <span class="msg-date">March 9, 2025</span>
+          </div>
+          <div class="message-title">The Secret Place: Understanding Intimacy with God</div>
+          <div class="message-speaker">Pastor Ngozi Adeyemi</div>
+          <audio class="message-audio" controls preload="none">
+            <source src="" type="audio/mpeg" />
+          </audio>
+        </div>
+        <div class="message-actions">
+          <a href="#" class="dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+          <span class="msg-duration">45 min</span>
+        </div>
+      </div>
+
+      <!-- Message 3 -->
+      <div class="message-card">
+        <div class="message-left">
+          <div class="message-meta">
+            <span class="msg-series">Faith Series</span>
+            <span class="msg-date">March 2, 2025</span>
+          </div>
+          <div class="message-title">Rebuilding Broken Altars</div>
+          <div class="message-speaker">Bishop David Adeyinka</div>
+          <audio class="message-audio" controls preload="none">
+            <source src="" type="audio/mpeg" />
+          </audio>
+        </div>
+        <div class="message-actions">
+          <a href="#" class="dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+          <span class="msg-duration">62 min</span>
+        </div>
+      </div>
+
+      <!-- Message 4 -->
+      <div class="message-card">
+        <div class="message-left">
+          <div class="message-meta">
+            <span class="msg-series">Family &amp; Life</span>
+            <span class="msg-date">Feb 23, 2025</span>
+          </div>
+          <div class="message-title">Raising a Godly Generation in a Digital Age</div>
+          <div class="message-speaker">Pastor Emmanuel Bello</div>
+          <audio class="message-audio" controls preload="none">
+            <source src="" type="audio/mpeg" />
+          </audio>
+        </div>
+        <div class="message-actions">
+          <a href="#" class="dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+          <span class="msg-duration">51 min</span>
+        </div>
+      </div>
+
+      <!-- Message 5 -->
+      <div class="message-card">
+        <div class="message-left">
+          <div class="message-meta">
+            <span class="msg-series">Healing &amp; Restoration</span>
+            <span class="msg-date">Feb 16, 2025</span>
+          </div>
+          <div class="message-title">When God Turns Your Mourning to Dancing</div>
+          <div class="message-speaker">Bishop David Adeyinka</div>
+          <audio class="message-audio" controls preload="none">
+            <source src="" type="audio/mpeg" />
+          </audio>
+        </div>
+        <div class="message-actions">
+          <a href="#" class="dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+          <span class="msg-duration">55 min</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     5. WATCH LIVE
+══════════════════════════════ -->
+<section class="live-section">
+  <div class="live-inner">
+    <div class="section-header">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        Watch Live
+      </div>
+      <h2>Our Programs Live</h2>
+      <p>Join us wherever you are — stream our services in real time</p>
+    </div>
+
+    <div class="yt-embed-wrap">
+      <!--
+        HOW TO ADD YOUR YOUTUBE LIVE EMBED:
+        1. Go to your YouTube channel and click "Go Live" or open any video/live stream.
+        2. Click Share → Embed → copy the iframe code.
+        3. Replace the placeholder div below with your iframe code.
+
+        Example:
+        <iframe
+          src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+
+        For a live stream specifically, use your channel's live URL:
+        src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID"
+      -->
+      <div class="yt-placeholder">
+        <div class="yt-placeholder-icon">
+          <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="rgba(255,255,255,0.5)"/></svg>
+        </div>
+        <p>YouTube embed goes here</p>
+        <code>Replace with your &lt;iframe&gt; from YouTube</code>
+      </div>
+    </div>
+
+    <div class="live-schedule">
+      <div class="schedule-pill">
+        <span class="schedule-pill-day">Sunday</span>
+        <span class="schedule-pill-time">8:00 AM &amp; 10:30 AM</span>
+      </div>
+      <div class="schedule-pill">
+        <span class="schedule-pill-day">Wednesday</span>
+        <span class="schedule-pill-time">6:00 PM</span>
+      </div>
+      <div class="schedule-pill">
+        <span class="schedule-pill-day">Friday</span>
+        <span class="schedule-pill-time">6:30 PM</span>
+      </div>
+      <div class="schedule-pill">
+        <span class="schedule-pill-day">Special programs</span>
+        <span class="schedule-pill-time">As announced</span>
+      </div>
+    </div>
+
+    <p class="live-note">
+      Can't catch us live? All recorded services are available on our
+      <a href="#">YouTube channel</a> and in the Messages section above.
+      Subscribe so you never miss a service.
+    </p>
+  </div>
+</section>
+
+<script>
+  /* ── Gallery ── */
+  const photos = [
+    { cat: "sunday",    label: "Morning worship",       src: "", h: 280 },
+    { cat: "events",    label: "Youth program",          src: "", h: 200 },
+    { cat: "building",  label: "The main hall",          src: "", h: 340 },
+    { cat: "community", label: "Food drive",             src: "", h: 220 },
+    { cat: "sunday",    label: "Choir performance",      src: "", h: 260 },
+    { cat: "events",    label: "Christmas program",      src: "", h: 310 },
+    { cat: "building",  label: "The bell tower",         src: "", h: 200 },
+    { cat: "community", label: "Neighbourhood cleanup",  src: "", h: 260 },
+    { cat: "sunday",    label: "Easter Sunday",          src: "", h: 220 },
+    { cat: "events",    label: "Baptism ceremony",       src: "", h: 300 },
+    { cat: "building",  label: "Chapel interior",        src: "", h: 240 },
+    { cat: "community", label: "After-school program",   src: "", h: 200 },
+    { cat: "sunday",    label: "Sunday prayer",          src: "", h: 320 },
+    { cat: "events",    label: "Harvest festival",       src: "", h: 210 },
+    { cat: "community", label: "Elderly care visit",     src: "", h: 280 },
+  ];
+
+  const catConfig = {
+    sunday:    { label: "Sunday service",     badge: "badge-sunday",    color: "#c8b6e2", icon: "✝" },
+    events:    { label: "Events & programs",  badge: "badge-events",    color: "#a8d8c2", icon: "★" },
+    building:  { label: "Church building",    badge: "badge-building",  color: "#f5d5a0", icon: "⛪" },
+    community: { label: "Community outreach", badge: "badge-community", color: "#f0b8a0", icon: "❤" },
+  };
+
+  function makePlaceholder(p) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 600; canvas.height = p.h * 2;
+    const ctx = canvas.getContext("2d");
+    const cfg = catConfig[p.cat];
+    ctx.fillStyle = cfg.color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(255,255,255,0.22)";
+    ctx.font = `${Math.min(canvas.height * 0.38, 140)}px serif`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(cfg.icon, canvas.width / 2, canvas.height / 2);
+    return canvas.toDataURL("image/png");
+  }
+
+  const grid = document.getElementById("grid");
+  photos.forEach((p) => {
+    const cfg = catConfig[p.cat];
+    const card = document.createElement("div");
+    card.className = "photo-card"; card.dataset.cat = p.cat;
+    const img = document.createElement("img");
+    img.src = p.src || makePlaceholder(p);
+    img.alt = p.label; img.style.height = p.h + "px"; img.loading = "lazy";
+    const overlay = document.createElement("div"); overlay.className = "photo-overlay";
+    const lbl = document.createElement("span"); lbl.className = "photo-label"; lbl.textContent = p.label;
+    const badge = document.createElement("span"); badge.className = "cat-badge " + cfg.badge; badge.textContent = cfg.label;
+    overlay.appendChild(lbl);
+    card.appendChild(img); card.appendChild(overlay); card.appendChild(badge);
+    grid.appendChild(card);
+    card.addEventListener("click", () => openLightbox(img.src, p.label));
+  });
+
+  const countLabel = document.getElementById("count-label");
+  function applyFilter(filter) {
+    let visible = 0;
+    document.querySelectorAll(".photo-card").forEach((card) => {
+      const show = filter === "all" || card.dataset.cat === filter;
+      card.classList.toggle("hidden", !show);
+      if (show) visible++;
+    });
+    countLabel.textContent = visible + " photo" + (visible !== 1 ? "s" : "");
+  }
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      applyFilter(btn.dataset.filter);
+    });
+  });
+  applyFilter("all");
+
+  /* ── Lightbox ── */
+  const lightbox = document.getElementById("lightbox");
+  const lbImg    = document.getElementById("lb-img");
+  const lbCaption = document.getElementById("lb-caption");
+
+  function openLightbox(src, caption) {
+    lbImg.src = src; lbImg.alt = caption; lbCaption.textContent = caption;
+    lightbox.classList.add("open"); document.body.style.overflow = "hidden";
+  }
+  function closeLightbox() {
+    lightbox.classList.remove("open"); document.body.style.overflow = "";
+  }
+  document.getElementById("lb-close").addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+</script>
+</body>
+</html>

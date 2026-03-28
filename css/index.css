@@ -1514,3 +1514,303 @@ footer {
       .pin-inner { font-size: 15px; }
       .branch-item:not(:last-child) .pin-col::after { left: 17px; }
     }
+    .overseer-section {
+      padding: 5rem 1.5rem;
+      background: #1a1a1a;
+      border-top: 1px solid #2a2a2a;
+    }
+    .overseer-inner { max-width: 940px; margin: 0 auto; }
+    .overseer-inner .section-header h2 { color: #f5f2ec; }
+    .overseer-inner .section-header p  { color: #9a9a9a; }
+
+    .overseer-card {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    @media (max-width: 760px) {
+      .overseer-card { grid-template-columns: 1fr; }
+      .overseer-photo-wrap { max-width: 280px; margin: 0 auto; }
+    }
+
+    .overseer-photo-wrap { position: relative; }
+    .overseer-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      background: #2e2e2e;
+    }
+    /* Placeholder shown when no real photo is set */
+    .overseer-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      background: #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px dashed #3a3a3a;
+    }
+    .overseer-photo-placeholder span { font-size: 48px; opacity: 0.3; }
+    .overseer-photo-placeholder p { font-size: 12px; color: #555; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .overseer-accent {
+      position: absolute;
+      bottom: -10px; right: -10px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: #EEEDFE;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .overseer-info { padding-top: 4px; }
+    .overseer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #f5f2ec;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    .overseer-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #b59a6a;
+      margin-bottom: 1.5rem;
+    }
+
+    .overseer-quote {
+      border-left: 2px solid #b59a6a;
+      padding: 0.6rem 0 0.6rem 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+    .overseer-quote blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #c8c2b8;
+      line-height: 1.6;
+    }
+
+    .overseer-bio {
+      font-size: 15px;
+      color: #9a9a9a;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .overseer-socials {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid #333;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: #9a9a9a;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-btn:hover { border-color: #b59a6a; color: #f5f2ec; }
+    .social-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* /* ════════════════════════════════
+       4. MESSAGES
+    ════════════════════════════════ */
+    .messages-section {
+      padding: 5rem 1.5rem;
+      background: #faf9f7;
+      border-top: 1px solid #e8e5e0;
+    }
+    .messages-inner { max-width: 860px; margin: 0 auto; }
+
+    .messages-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .message-card {
+      background: #fff;
+      border: 1px solid #e8e5e0;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .message-card:hover { border-color: #c4c1ba; }
+
+    .message-left { display: flex; flex-direction: column; gap: 6px; }
+    .message-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .msg-series {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 9px;
+      border-radius: 100px;
+      background: #EEEDFE;
+      color: #3C3489;
+    }
+    .msg-date { font-size: 12px; color: #9a9a9a; }
+
+    .message-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+    .message-speaker { font-size: 13px; color: #6b6b6b; }
+
+    /* Native audio player styled minimally */
+    .message-audio {
+      width: 100%;
+      height: 36px;
+      accent-color: #1a1a1a;
+      margin-top: 4px;
+    }
+
+    .message-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid #d4d2cb;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 500;
+      color: #1a1a1a;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.03em;
+      font-family: 'Jost', sans-serif;
+    }
+    .dl-btn:hover { background: #f0ede8; border-color: #b8b5ae; }
+    .dl-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .msg-duration { font-size: 11px; color: #b0ada8; letter-spacing: 0.04em; text-align: right; }
+
+    @media (max-width: 600px) {
+      .message-card { grid-template-columns: 1fr; }
+      .message-actions { flex-direction: row; align-items: center; }
+    } */
+
+    /* ════════════════════════════════
+       5. LIVE / YOUTUBE
+    ════════════════════════════════ */
+    .live-section {
+      padding: 5rem 1.5rem 6rem;
+      background: #f2efe9;
+      border-top: 1px solid #e2dfd8;
+    }
+    .live-inner { max-width: 900px; margin: 0 auto; }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c0392b;
+      background: #fde8e7;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #c0392b;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* YouTube embed container */
+    .yt-embed-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #111;
+      margin-bottom: 1.5rem;
+      border: 1px solid #dedad3;
+    }
+    .yt-embed-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Placeholder shown before real YouTube ID is added */
+    .yt-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #1a1a1a;
+    }
+    .yt-placeholder-icon {
+      width: 64px; height: 64px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .yt-placeholder-icon svg { width: 28px; height: 28px; fill: rgba(255,255,255,0.5); }
+    .yt-placeholder p { font-size: 13px; color: #555; letter-spacing: 0.04em; }
+    .yt-placeholder code { font-size: 12px; color: #b59a6a; background: #222; padding: 3px 10px; border-radius: 6px; }
+
+    .live-schedule {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .schedule-pill {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 18px;
+      background: #fff;
+      border: 1px solid #e2dfd8;
+      border-radius: 10px;
+    }
+    .schedule-pill-day { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #9a9a9a; }
+    .schedule-pill-time { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+
+    .live-note { margin-top: 1.2rem; font-size: 13px; color: #9a9a9a; line-height: 1.7; }
+    .live-note a { color: #1a1a1a; }
