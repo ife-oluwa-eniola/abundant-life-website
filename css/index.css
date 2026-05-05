@@ -1814,3 +1814,93 @@ footer {
 
     .live-note { margin-top: 1.2rem; font-size: 13px; color: #9a9a9a; line-height: 1.7; }
     .live-note a { color: #1a1a1a; }
+    
+
+/* SERVICES - layout + responsive tweaks */
+.services-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+/* cards column */
+.services-cards {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* each service row as a flexible row that can wrap */
+.service-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+}
+
+/* columns inside a service row */
+.service-day-col {
+  flex: 0 0 160px;
+  min-width: 110px;
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.service-name-col {
+  flex: 1 1 auto;
+  min-width: 160px;
+  line-height: 1.25;
+}
+
+.service-name-col small {
+  display: block;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.service-time-col {
+  flex: 0 0 140px;
+  min-width: 100px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--deep);
+}
+
+/* RESPONSIVE: stack the grid and allow service rows to wrap */
+@media (max-width: 900px) {
+  .services-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 0 1.25rem;
+  }
+  .services-cards {
+    order: 2; /* show cards under the intro on mobile */
+  }
+  .services-layout > div:first-child {
+    order: 1;
+  }
+  .service-row {
+    flex-wrap: wrap;
+    padding: 0.9rem;
+  }
+  .service-day-col { flex: 0 0 38%; text-align: left; }
+  .service-name-col { flex: 1 1 62%; }
+  .service-time-col { flex: 0 0 100%; text-align: left; margin-top: 0.35rem; color: var(--muted); }
+}
+
+/* Narrow phones */
+@media (max-width: 520px) {
+  .service-day-col { flex-basis: 100%; font-size: 0.98rem; }
+  .service-name-col { flex-basis: 100%; font-size: 0.96rem; }
+  .service-name-col small { font-size: 0.86rem; }
+  .service-time-col { font-size: 0.92rem; }
+  .services-layout { padding: 0 0.75rem; gap: 0.75rem; }
+}
+
+/* ...existing code... */
