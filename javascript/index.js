@@ -25,7 +25,7 @@
    * ─────────────────────────────────────────────
    */
   const photos = [
-    { cat: "sunday",    label: "Message session",        src: "asset/IMG-20260325-WA0069.jpg", h: 280 },
+    { cat: "sunday",    label: "Message session",        src: "../asset/IMG-20260325-WA0069.jpg", h: 280 },
     { cat: "sunday",    label: "Ministers of God",           src: "asset/IMG-20260325-WA0063.jpg", h: 200 },
     { cat: "community",  label: "Evangelism",           src: "asset/IMG-20260325-WA0096.jpg", h: 340 },
     { cat: "events", label: "Women program",              src: "asset/IMG-20260325-WA0031.jpg", h: 220 },
