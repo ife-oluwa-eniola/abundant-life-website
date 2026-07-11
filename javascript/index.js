@@ -153,4 +153,9 @@
   lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
 
+  fetch("https://formspree.io/f/xjgnbyny/form-grid", {
+    method: "POST",
+headers: { "Accept": "application/json" },
+    body: new FormData(document.querySelector(".form-grid"))
+  });
   

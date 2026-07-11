@@ -598,32 +598,52 @@
       <div class="reveal">
         <h3 class="form-title">Send Us a Message</h3>
         <p class="form-subtitle">Fill out the form below and a member of our team will get back to you within 24 hours.</p>
-<form class="form-grid" >       
-     <div class="form-row-2">
-            <div class="field"><label>First Name</label><input type="text" placeholder="John"/></div>
-            <div class="field"><label>Last Name</label><input type="text" placeholder="Doe"/></div>
-          </div>
-          <div class="field"><label>Email Address</label><input type="email" placeholder="john@example.com"/></div>
-          <div class="field"><label>Phone Number</label><input type="tel" placeholder="+234 800 000 0000"/></div>
-          <div class="field">
-            <label>How Can We Help?</label>
-            <select>
-              <option value="">Select a topic…</option>
-              <option>First-Time Visit</option>
-              <option>General Enquiry</option>
-              <option>Prayer Request</option>
-              <option>Membership &amp; Joining</option>
-              <option>Volunteering</option>
-              <option>Giving &amp; Tithes</option>
-              <option>Counselling</option>
-            </select>
-          </div>
-          <div class="field"><label>Your Message</label><textarea placeholder="Share what's on your heart…"></textarea></div>
-          <div class="form-submit">
-            <button type="submit" class="btn-submit" id="submitBtn">Send Message</button>
-            <p class="form-note">We respect your privacy.<br>Your details are kept confidential.</p>
-          </div>
-        </form>
+<form id="contactForm" class="form-grid" action="https://formspree.io/f/xjgnbyny" method="POST">
+  <div class="form-row">
+    <div class="field">
+      <label>First Name</label>
+      <input type="text" name="first_name" placeholder="John" required>
+    </div>
+    <div class="field">
+      <label>Last Name</label>
+      <input type="text" name="last_name" placeholder="Doe" required>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Email Address</label>
+    <input type="email" name="email" placeholder="john@example.com" required>
+  </div>
+
+  <div class="field">
+    <label>Phone Number</label>
+    <input type="tel" name="phone" placeholder="+234 800 000 0000">
+  </div>
+
+  <div class="field">
+    <label>How Can We Help?</label>
+    <select name="topic" required>
+      <option value="">Select a topic...</option>
+      <option value="First-Time Visit">First-Time Visit</option>
+      <option value="General Enquiry">General Enquiry</option>
+      <option value="Prayer Request">Prayer Request</option>
+      <option value="Membership & Joining">Membership & Joining</option>
+      <option value="Volunteering">Volunteering</option>
+      <option value="Giving & Tithes">Giving & Tithes</option>
+      <option value="Counselling">Counselling</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Your Message</label>
+    <textarea name="message" placeholder="Share what's on your heart..." rows="5"></textarea>
+  </div>
+
+  <div class="form-submit">
+    <button type="submit" class="btn-submit" id="submitBtn">Send Message</button>
+    <p class="form-note">We respect your privacy.<br>Your details are kept confidential.</p>
+  </div>
+</form>
       </div>
     </div>
   </section>
